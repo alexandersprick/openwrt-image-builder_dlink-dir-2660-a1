@@ -1,0 +1,2 @@
+config dnscheck 'dnscheck'
+    option enabled '1'
