@@ -15,8 +15,46 @@
 #   echo $i
 #  fi
 # done
-PACKAGES="luci luci-proto-wireguard luci-app-wireguard luci-app-ksmbd block-mount kmod-fs-vfat kmod-usb-storage wget sshtunnel sshpass tmux netcat socat nmap iperf3 kmod-tun liblzo2 libqrencode qrencode tinc"
-
+PACKAGES="\
+luci \
+luci-proto-wireguard \
+luci-app-ksmbd \
+luci-app-sqm \
+block-mount \
+kmod-fs-vfat \
+kmod-usb-storage \
+wget \
+sshtunnel \
+sshpass \
+tmux \
+netcat \
+socat \
+nmap \
+iperf3 \
+kmod-tun \
+liblzo2 \
+libqrencode \
+qrencode \
+tinc \
+iptables-mod-ipopt \
+iptables-zz-legacy \
+kmod-ifb \
+kmod-ipt-core \
+kmod-ipt-ipopt \
+kmod-nf-ipt \
+kmod-sched-cake \
+kmod-sched-core \
+libip4tc2 \
+libip6tc2 \
+libiptext0 \
+libiptext6-0 \
+libxtables12 \
+luci-app-sqm \
+luci-app-nlbwmon \
+sqm-scripts \
+tc-tiny \
+xtables-legacy \
+"
 # Extra name for the image file. Note that some devices have a maximum length for the image name.
 EXTRA_IMAGE_NAME="alexander-dlink-dir-2660"
 
@@ -32,8 +70,8 @@ PROFILE="dlink_dir-2660-a1"
 # Find your target here (see Target/Subtarget column):
 # https://openwrt.org/toh/hwdata/d-link/d-link_dir-2660_a1
 # Copy the URL of the imagebuilder for your target here:
-# https://downloads.openwrt.org/releases/23.05.5/targets/
-TARGET="https://downloads.openwrt.org/releases/23.05.5/targets/ramips/mt7621/openwrt-imagebuilder-23.05.5-ramips-mt7621.Linux-x86_64.tar.xz"
+# https://downloads.openwrt.org/releases/24.10.1/targets/
+TARGET=https://downloads.openwrt.org/releases/24.10.1/targets/ramips/mt7621/openwrt-imagebuilder-24.10.1-ramips-mt7621.Linux-x86_64.tar.zst
 
 # base directory is the directory of the script
 cd "$( cd "$(dirname "$0")" ; pwd -P )" || exit 1
@@ -60,7 +98,7 @@ test -f "$(basename $TARGET)" || wget $TARGET
 rm -rf docker-build
 mkdir -p docker-build/imagebuilder
 echo "extracting $(basename $TARGET)"
-tar -C docker-build/imagebuilder --strip-components=1 -Jxf "$(basename $TARGET)"
+tar -C docker-build/imagebuilder --strip-components=1 --zstd -xf $(basename $TARGET)
 cp -r files docker-build/imagebuilder
 
 # prepare the wireless configuration with the given SSID and password

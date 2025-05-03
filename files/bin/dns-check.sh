@@ -15,7 +15,7 @@ restart_wan() {
 while true; do
     sleep 60
     # make sure the interface is up
-    uci -P /var/state -q get network.wan.up || continue
+    { grep -q 1 /sys/class/net/wan/carrier && uci -P /var/state -q get network.wan.up; } || continue
     # allow not more than 6 consecutive fails
     for count in $(seq 1 6); do
         sleep 10
